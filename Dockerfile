@@ -25,7 +25,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
  && rm -rf /var/lib/apt/lists/*
 
 ARG DOCKER_CLI_VERSION=20.10-cli
-COPY --from=docker:20.10-cli /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker:20.10-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
 
 ARG HELM_VERSION=3.10.1
 RUN set -e; \
