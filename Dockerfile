@@ -47,7 +47,7 @@ RUN set -e; \
 # Install buildx
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
-ARG CODE_SERVER_VERSION=4.7.1
+ARG CODE_SERVER_VERSION=4.8.2
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 ARG K9S_VERSION=0.26.3
@@ -69,8 +69,6 @@ RUN useradd coder \
       --uid=1000 \
       --user-group && \
       echo "coder ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/nopasswd
-
-# --groups=docker \
 
 RUN mkdir /run/sshd
 
