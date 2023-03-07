@@ -48,7 +48,7 @@ RUN set -e; \
 # Install buildx
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
-ARG CODE_SERVER_VERSION=4.9.1
+ARG CODE_SERVER_VERSION=4.10.0
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 ARG K9S_VERSION=0.27.3
