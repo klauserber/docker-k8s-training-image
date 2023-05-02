@@ -28,7 +28,7 @@ COPY --from=docker:23.0.1-cli /usr/local/bin/docker /usr/local/bin/docker-compos
 
 RUN curl -s https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
 
-ARG HELM_VERSION=3.11.1
+ARG HELM_VERSION=3.11.3
 RUN set -e; \
   cd /tmp; \
   curl -Ss -o helm.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
@@ -37,7 +37,7 @@ RUN set -e; \
   chmod +x /usr/local/bin/helm; \
   rm -rf ${TARGETOS}-${TARGETARCH} helm.tar.gz
 
-ARG KUBECTL_VERSION=1.25.6
+ARG KUBECTL_VERSION=1.27.1
 RUN set -e; \
     cd /tmp; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
@@ -48,7 +48,7 @@ RUN set -e; \
 # Install buildx
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
-ARG CODE_SERVER_VERSION=4.10.0
+ARG CODE_SERVER_VERSION=4.12.0
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 ARG K9S_VERSION=0.27.3
