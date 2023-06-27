@@ -61,6 +61,12 @@ RUN set -e; \
   cd /tmp; \
   rm -rf k9s
 
+ARG KUBESEAL_VERSION=0.22.0
+RUN set -e; \
+  wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
+  tar -xvzf kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz kubeseal; \
+  install -m 755 kubeseal /usr/local/bin/kubeseal
+
 COPY helpers /helpers
 
 RUN useradd coder \
