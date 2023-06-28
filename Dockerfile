@@ -61,6 +61,7 @@ RUN set -e; \
   cd /tmp; \
   rm -rf k9s
 
+# https://github.com/bitnami-labs/sealed-secrets/releases
 ARG KUBESEAL_VERSION=0.22.0
 RUN set -e; \
   wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
