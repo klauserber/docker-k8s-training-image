@@ -25,12 +25,12 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
  && rm -rf /var/lib/apt/lists/*
 
 # https://hub.docker.com/_/docker/tags
-COPY --from=docker:23.0.6-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
+COPY --from=docker:24.0.5-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
 
 RUN curl -s https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
 
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.12.2
+ARG HELM_VERSION=3.12.3
 RUN set -e; \
   cd /tmp; \
   curl -Ss -o helm.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
@@ -40,7 +40,7 @@ RUN set -e; \
   rm -rf ${TARGETOS}-${TARGETARCH} helm.tar.gz
 
 # https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.27.3
+ARG KUBECTL_VERSION=1.27.4
 RUN set -e; \
     cd /tmp; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
@@ -52,7 +52,7 @@ RUN set -e; \
 COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 # https://github.com/coder/code-server/releases
-ARG CODE_SERVER_VERSION=4.15.0
+ARG CODE_SERVER_VERSION=4.16.1
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 # https://github.com/derailed/k9s/releases
@@ -67,7 +67,7 @@ RUN set -e; \
   rm -rf k9s
 
 # https://github.com/bitnami-labs/sealed-secrets/releases
-ARG KUBESEAL_VERSION=0.23.0
+ARG KUBESEAL_VERSION=0.23.1
 RUN set -e; \
   wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
   tar -xvzf kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz kubeseal; \
