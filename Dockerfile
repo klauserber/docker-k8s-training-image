@@ -26,6 +26,8 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
 
 # https://hub.docker.com/_/docker/tags
 COPY --from=docker:24.0.6-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
+# https://hub.docker.com/r/docker/buildx-bin/tags
+COPY --from=docker/buildx-bin:0.11.2 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 RUN curl -s https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
 
@@ -46,10 +48,6 @@ RUN set -e; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
     mv kubectl /usr/local/bin/; \
     chmod +x /usr/local/bin/kubectl
-
-
-# Install buildx
-# COPY --from=docker/buildx-bin:latest /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 # https://github.com/coder/code-server/releases
 ARG CODE_SERVER_VERSION=4.17.1
