@@ -3,6 +3,8 @@ FROM ubuntu:22.04
 ARG TARGETARCH=amd64
 ARG TARGETOS=linux
 
+ENV LP_HOSTNAME_ALWAYS=-1
+
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-get install -y \
     ca-certificates \
     software-properties-common \
@@ -22,6 +24,7 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
     gettext-base \
     bash-completion \
     sipcalc \
+    liquidprompt \
  && rm -rf /var/lib/apt/lists/*
 
 # https://hub.docker.com/_/docker/tags
@@ -48,10 +51,6 @@ RUN set -e; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
     mv kubectl /usr/local/bin/; \
     chmod +x /usr/local/bin/kubectl
-
-# https://github.com/coder/code-server/releases
-ARG CODE_SERVER_VERSION=4.17.1
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION}
 
 # https://github.com/derailed/k9s/releases
 ARG K9S_VERSION=0.27.4
