@@ -25,15 +25,15 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
     liquidprompt \
  && rm -rf /var/lib/apt/lists/*
 
-# https://hub.docker.com/_/docker/tags
-COPY --from=docker:24.0.6-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
-# https://hub.docker.com/r/docker/buildx-bin/tags
-COPY --from=docker/buildx-bin:0.12.0 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
+# ##versions: https://hub.docker.com/_/docker/tags
+COPY --from=docker:25.0.4-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
+# ##versions: https://hub.docker.com/r/docker/buildx-bin/tags
+COPY --from=docker/buildx-bin:0.13.0 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 RUN curl -s https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
 
-# https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.13.3
+# ##versions: https://github.com/helm/helm/releases
+ARG HELM_VERSION=3.14.2
 RUN set -e; \
   cd /tmp; \
   curl -Ss -o helm.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
@@ -42,16 +42,16 @@ RUN set -e; \
   chmod +x /usr/local/bin/helm; \
   rm -rf ${TARGETOS}-${TARGETARCH} helm.tar.gz
 
-# https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.28.5
+# ##versions: https://github.com/kubernetes/kubernetes/releases
+ARG KUBECTL_VERSION=1.29.2
 RUN set -e; \
     cd /tmp; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
     mv kubectl /usr/local/bin/; \
     chmod +x /usr/local/bin/kubectl
 
-# https://github.com/derailed/k9s/releases
-ARG K9S_VERSION=0.30.5
+# ##versions: https://github.com/derailed/k9s/releases
+ARG K9S_VERSION=0.32.3
 RUN set -e; \
   mkdir -p /tmp/k9s; \
   cd /tmp/k9s; \
@@ -61,8 +61,8 @@ RUN set -e; \
   cd /tmp; \
   rm -rf k9s
 
-# https://github.com/bitnami-labs/sealed-secrets/releases
-ARG KUBESEAL_VERSION=0.24.5
+# ##versions: https://github.com/bitnami-labs/sealed-secrets/releases
+ARG KUBESEAL_VERSION=0.26.0
 RUN set -e; \
   wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
   tar -xvzf kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz kubeseal; \
