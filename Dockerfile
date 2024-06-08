@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ARG TARGETARCH=amd64
 ARG TARGETOS=linux
@@ -26,14 +26,14 @@ RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-ge
  && rm -rf /var/lib/apt/lists/*
 
 # ##versions: https://hub.docker.com/_/docker/tags
-COPY --from=docker:25.0.4-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
+COPY --from=docker:26.1.4-cli /usr/local/bin/docker /usr/local/bin/docker-compose /usr/local/bin/
 # ##versions: https://hub.docker.com/r/docker/buildx-bin/tags
-COPY --from=docker/buildx-bin:0.13.0 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
+COPY --from=docker/buildx-bin:0.14.1 /buildx /usr/libexec/docker/cli-plugins/docker-buildx
 
 RUN curl -s https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker.sh
 
 # ##versions: https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.14.2
+ARG HELM_VERSION=3.15.1
 RUN set -e; \
   cd /tmp; \
   curl -Ss -o helm.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
@@ -43,7 +43,7 @@ RUN set -e; \
   rm -rf ${TARGETOS}-${TARGETARCH} helm.tar.gz
 
 # ##versions: https://github.com/kubernetes/kubernetes/releases
-ARG KUBECTL_VERSION=1.29.2
+ARG KUBECTL_VERSION=1.30.1
 RUN set -e; \
     cd /tmp; \
     curl -sLO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/${TARGETOS}/${TARGETARCH}/kubectl"; \
@@ -51,7 +51,7 @@ RUN set -e; \
     chmod +x /usr/local/bin/kubectl
 
 # ##versions: https://github.com/derailed/k9s/releases
-ARG K9S_VERSION=0.32.3
+ARG K9S_VERSION=0.32.4
 RUN set -e; \
   mkdir -p /tmp/k9s; \
   cd /tmp/k9s; \
@@ -62,7 +62,7 @@ RUN set -e; \
   rm -rf k9s
 
 # ##versions: https://github.com/bitnami-labs/sealed-secrets/releases
-ARG KUBESEAL_VERSION=0.26.0
+ARG KUBESEAL_VERSION=0.26.3
 RUN set -e; \
   wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz; \
   tar -xvzf kubeseal-${KUBESEAL_VERSION}-${TARGETOS}-${TARGETARCH}.tar.gz kubeseal; \
@@ -70,7 +70,9 @@ RUN set -e; \
 
 COPY helpers /helpers
 
-RUN useradd coder \
+RUN set -e; \
+  deluser ubuntu; \
+  useradd coder \
       --create-home \
       --shell=/bin/bash \
       --uid=1000 \
